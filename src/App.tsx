@@ -31,21 +31,19 @@ const App = () => {
     const newTotalPotatoes = state.shop.reduce((acc, el) => {
       return el.startPotatoPerSec * 2 ** el.upgradeLevel * el.amount + acc;
     }, 0);
-    console.log(state.totalPotatoes);
 
-    const newState = {
-      ...state,
-      totalPotatoes: newTotalPotatoes + state.totalPotatoes,
-    };
-
-    setState(newState);
+    setState((prevState) => ({
+      ...prevState,
+      totalPotatoes: newTotalPotatoes + prevState.totalPotatoes,
+    }));
   };
 
   useEffect(() => {
-    setInterval(() => {
-      console.log('1');
+    const intervalId = setInterval(() => {
       addPotatoesPerSec();
     }, 1000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
