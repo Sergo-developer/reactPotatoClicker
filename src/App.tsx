@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import PotatoShop from './components/PotatoShop';
+import MainBlock from './components/MainBlock';
+import { AppState } from './types/appState';
 
 const App = () => {
-  const [state, setState] = useState({
+  const [state, setState] = useState<AppState>({
     totalPotatoes: 0,
     shop: [
       {
         name: 'hoe',
         image: '',
-        amount: 1,
+        amount: 0,
         startPotatoPerSec: 1,
         startPrice: 15,
         priceIncreaseByAmount: 5,
-        upgradeLevel: 2,
+        upgradeLevel: 0,
       },
       {
         name: 'farm',
@@ -25,22 +27,39 @@ const App = () => {
         upgradeLevel: 0,
       },
     ],
+    clickShop: [
+      {
+        name: '',
+        image: '',
+        upgradeLevel: 0,
+      },
+    ],
   });
 
-  const addPotatoesPerSec = () => {
-    const newTotalPotatoes = state.shop.reduce((acc, el) => {
+  const [potatoesPerSec, setPotatoesPerSec] = useState<number>(0);
+  const [potatoesPerClick, setPotatoesPerClick] = useState<number>(1);
+
+  const recountPotatoes = () => {
+    const newPotatoesPerSecToAdd = state.shop.reduce((acc, el) => {
       return el.startPotatoPerSec * 2 ** el.upgradeLevel * el.amount + acc;
     }, 0);
 
+    const newPotatoesPerClick = state.clickShop.reduce((acc, el) => {
+      return acc + el.upgradeLevel;
+    }, 1);
+
+    setPotatoesPerSec(newPotatoesPerSecToAdd);
+    setPotatoesPerClick(newPotatoesPerClick);
+
     setState((prevState) => ({
       ...prevState,
-      totalPotatoes: newTotalPotatoes + prevState.totalPotatoes,
+      totalPotatoes: newPotatoesPerSecToAdd + prevState.totalPotatoes,
     }));
   };
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      addPotatoesPerSec();
+      recountPotatoes();
     }, 1000);
 
     return () => clearInterval(intervalId);
@@ -48,13 +67,12 @@ const App = () => {
 
   return (
     <>
-      <div className='main-block'>
-        <div className='total-potatoes'>{state.totalPotatoes}</div>
-        <div className='potatoes-per-sec'></div>
-        <div className='potato'></div>
-        <div className='potatoes-per-click'></div>
-      </div>
-      <PotatoShop></PotatoShop>
+      <MainBlock
+        state={state}
+        potatoesPerSec={potatoesPerSec}
+        potatoesPerClick={potatoesPerClick}
+      />
+      <PotatoShop />
     </>
   );
 };
