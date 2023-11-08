@@ -7,6 +7,8 @@ import { AppState } from './types/appState';
 const App = () => {
   const [state, setState] = useState<AppState>({
     totalPotatoes: 0,
+    potatoesPerSec: 0,
+    potatoesPerClick: 1,
     shop: [
       {
         name: 'hoe',
@@ -29,50 +31,63 @@ const App = () => {
     ],
     clickShop: [
       {
-        name: '',
-        image: '',
+        name: 'shovel',
+        image: '../../assets/images/disable_shovel.png',
+        upgradeLevel: 0,
+      },
+      {
+        name: 'fertilizer',
+        image: '../../assets/images/disable_bone_meal.png',
+        upgradeLevel: 0,
+      },
+      {
+        name: 'reaper',
+        image: '../../assets/images/disable_potato_reaper.png',
         upgradeLevel: 0,
       },
     ],
   });
 
-  const [potatoesPerSec, setPotatoesPerSec] = useState<number>(0);
-  const [potatoesPerClick, setPotatoesPerClick] = useState<number>(1);
+  const onPotatoClick = () => {
+    setState({
+      ...state,
+      totalPotatoes: state.potatoesPerClick + state.totalPotatoes,
+    });
+  };
 
-  const recountPotatoes = () => {
-    const newPotatoesPerSecToAdd = state.shop.reduce((acc, el) => {
-      return el.startPotatoPerSec * 2 ** el.upgradeLevel * el.amount + acc;
-    }, 0);
-
-    const newPotatoesPerClick = state.clickShop.reduce((acc, el) => {
-      return acc + el.upgradeLevel;
-    }, 1);
-
-    setPotatoesPerSec(newPotatoesPerSecToAdd);
-    setPotatoesPerClick(newPotatoesPerClick);
-
+  const addPotatoesByTimer = () => {
     setState((prevState) => ({
       ...prevState,
-      totalPotatoes: newPotatoesPerSecToAdd + prevState.totalPotatoes,
+      totalPotatoes: prevState.potatoesPerSec + prevState.totalPotatoes,
     }));
   };
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      recountPotatoes();
+      addPotatoesByTimer();
     }, 1000);
+
+    const newPotatoesPerSecToAdd = state.shop.reduce((acc, el) => {
+      return el.startPotatoPerSec * 2 ** el.upgradeLevel * el.amount + acc;
+    }, 1);
+
+    const newPotatoesPerClick = state.clickShop.reduce((acc, el) => {
+      return acc + el.upgradeLevel;
+    }, 1);
+
+    setState({
+      ...state,
+      potatoesPerSec: newPotatoesPerSecToAdd,
+      potatoesPerClick: newPotatoesPerClick,
+    });
 
     return () => clearInterval(intervalId);
   }, []);
 
   return (
     <>
-      <MainBlock
-        state={state}
-        potatoesPerSec={potatoesPerSec}
-        potatoesPerClick={potatoesPerClick}
-      />
-      <PotatoShop />
+      <MainBlock state={state} onPotatoClick={onPotatoClick} />
+      <PotatoShop clickShop={state.clickShop} shop={state.shop} />
     </>
   );
 };

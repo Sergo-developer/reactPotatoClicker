@@ -16,6 +16,8 @@ export type ClickShopItem = {
 
 export type AppState = {
   totalPotatoes: number;
+  potatoesPerSec: number;
+  potatoesPerClick: number;
   shop: ShopItem[];
   clickShop: ClickShopItem[];
 };

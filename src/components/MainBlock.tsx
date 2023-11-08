@@ -4,10 +4,11 @@ import potatoImage from '../assets/images/potato.png';
 import dirtImage from '../assets/images/dirt.png';
 import spruceLog from '../assets/images/spruce_log.png';
 
+type OnPotatoClick = () => void;
+
 type MainBlockProps = {
   state: AppState;
-  potatoesPerSec: number;
-  potatoesPerClick: number;
+  onPotatoClick: OnPotatoClick;
 };
 
 const MainBlockWrapper = styled.div`
@@ -58,13 +59,13 @@ const PotatoesPerClick = styled(PotatoesPerSec)`
   text-align: center;
 `;
 
-const MainBlock = ({ state, potatoesPerSec, potatoesPerClick }: MainBlockProps) => {
+const MainBlock = ({ state, onPotatoClick }: MainBlockProps) => {
   return (
     <MainBlockWrapper>
       <TotalPotatoes>Картошка {state.totalPotatoes}</TotalPotatoes>
-      <PotatoesPerSec>Картошка/сек {potatoesPerSec}</PotatoesPerSec>
-      <Potato />
-      <PotatoesPerClick>{potatoesPerClick}/клик</PotatoesPerClick>
+      <PotatoesPerSec>Картошка/сек {state.potatoesPerSec}</PotatoesPerSec>
+      <Potato onClick={onPotatoClick}/>
+      <PotatoesPerClick>{state.potatoesPerClick}/клик</PotatoesPerClick>
     </MainBlockWrapper>
   );
 };
