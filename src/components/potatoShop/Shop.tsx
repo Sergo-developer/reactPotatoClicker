@@ -6,7 +6,10 @@ type ShopProps = {
   shop: ShopItem[];
 };
 
-const ShopWrapper = styled.div``;
+const ShopWrapper = styled.div`
+  display: grid;
+  gap: 10px;
+`;
 
 const Shop = ({ shop }: ShopProps) => {
   return (

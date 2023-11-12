@@ -12,7 +12,7 @@ type PotatoShopProps = {
 
 const PotatoBlockWrapper = styled.div`
   display: grid;
-  grid-template-rows: 70px 1fr;
+  grid-template-rows: 120px 1fr;
   background-image: url(${planksImage});
 `;
 
