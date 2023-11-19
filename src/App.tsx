@@ -4,6 +4,11 @@ import PotatoShop from './components/PotatoShop';
 import MainBlock from './components/MainBlock';
 import { AppState } from './types/appState';
 
+import potatoAudio from 'use-sound';
+import potatoSound1 from './assets/sounds/potato_1.ogg';
+import potatoSound2 from './assets/sounds/potato_2.ogg';
+import potatoSound3 from './assets/sounds/potato_3.ogg';
+
 import clickerShop1upgrade1 from './assets/images/wooden_hoe.png';
 import clickerShop2upgrade1 from './assets/images/farm.png';
 import clickerShop3upgrade1 from './assets/images/vitaly.png';
@@ -63,13 +68,19 @@ const App = () => {
         upgradeLevel: 0,
       },
     ],
+    potatoClickSound: [potatoSound1, potatoSound2, potatoSound3],
   });
+
+  const [playSound] = potatoAudio(
+    state.potatoClickSound[Math.floor(Math.random() * state.potatoClickSound.length)],
+  );
 
   const onPotatoClick = () => {
     setState({
       ...state,
       totalPotatoes: state.potatoesPerClick + state.totalPotatoes,
     });
+    playSound();
   };
 
   const addPotatoesByTimer = () => {

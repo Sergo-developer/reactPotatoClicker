@@ -20,4 +20,5 @@ export type AppState = {
   potatoesPerClick: number;
   shop: ShopItem[];
   clickShop: ClickShopItem[];
+  potatoClickSound: string[];
 };
