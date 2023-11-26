@@ -15,7 +15,7 @@ const Shop = ({ shop }: ShopProps) => {
   return (
     <ShopWrapper>
       {shop.map((el) => (
-        <ShopElement value={el} />
+        <ShopElement key={el.id} value={el} />
       ))}
     </ShopWrapper>
   );

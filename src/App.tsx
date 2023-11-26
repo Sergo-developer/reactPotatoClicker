@@ -4,7 +4,7 @@ import PotatoShop from './components/PotatoShop';
 import MainBlock from './components/MainBlock';
 import { AppState } from './types/appState';
 
-import potatoAudio from 'use-sound';
+import useSound from 'use-sound';
 import potatoSound1 from './assets/sounds/potato_1.ogg';
 import potatoSound2 from './assets/sounds/potato_2.ogg';
 import potatoSound3 from './assets/sounds/potato_3.ogg';
@@ -24,6 +24,7 @@ const App = () => {
     potatoesPerClick: 1,
     shop: [
       {
+        id: 1,
         name: 'Мотыга',
         image: clickerShop1upgrade1,
         amount: 0,
@@ -33,6 +34,7 @@ const App = () => {
         upgradeLevel: 0,
       },
       {
+        id: 2,
         name: 'Ферма',
         image: clickerShop2upgrade1,
         amount: 0,
@@ -42,6 +44,7 @@ const App = () => {
         upgradeLevel: 0,
       },
       {
+        id: 3,
         name: 'Виталик',
         image: clickerShop3upgrade1,
         amount: 0,
@@ -53,16 +56,19 @@ const App = () => {
     ],
     clickShop: [
       {
+        id: 1,
         name: 'shovel',
         image: clickerShopUpgradeDisable1,
         upgradeLevel: 0,
       },
       {
+        id: 2,
         name: 'fertilizer',
         image: clickerShopUpgradeDisable2,
         upgradeLevel: 0,
       },
       {
+        id: 3,
         name: 'reaper',
         image: clickerShopUpgradeDisable3,
         upgradeLevel: 0,
@@ -71,7 +77,7 @@ const App = () => {
     potatoClickSound: [potatoSound1, potatoSound2, potatoSound3],
   });
 
-  const [playSound] = potatoAudio(
+  const [playSound] = useSound(
     state.potatoClickSound[Math.floor(Math.random() * state.potatoClickSound.length)],
   );
 

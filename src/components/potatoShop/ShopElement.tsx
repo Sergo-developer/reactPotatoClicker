@@ -7,49 +7,49 @@ type ShopElementProps = {
   value: ShopItem;
 };
 
-const ShopElement = ({ value }: ShopElementProps) => {
-
-  const ShopElementWrapper = styled.div`
+const ShopElementWrapper = styled.div`
   display: flex;
   gap: 10px;
-  `;
-  
-  const ShopLeftElement = styled.div`
-    background-image: url(${strippedOakLog});
-    align-items: center;
-    display: grid;
-    grid-template-areas: 'a b c d';
-    height: 100px;
-    width: 90%;
-    border: 5px solid;
-    border-color: #584d3b;
-    cursor: pointer;
-    margin-left: 10px;
-    text-align: center;
-  `;
+`;
 
-  const ShopImage = styled.div`
-    background-image: url(${value.image});
-    height: 100px;
-    width: 100px;
-    color: #99ff00;
-    text-shadow: black 0 0 10px;
-    text-align: left;
-  `;
-  const ShopUpgrade = styled.div`
-    background-image: url(${testImage});
-    border: 5px solid;
-    border-color: #584d3b;
-    height: 100px;
-    width: 100px;
-    color: #99ff00;
-    text-shadow: black 0 0 10px;
-  `;
+const ShopLeftElement = styled.div`
+  background-image: url(${strippedOakLog});
+  align-items: center;
+  display: grid;
+  grid-template-areas: 'a b c d';
+  height: 100px;
+  width: 90%;
+  border: 5px solid;
+  border-color: #584d3b;
+  cursor: pointer;
+  margin-left: 10px;
+  text-align: center;
+`;
 
+const ShopImage = styled.div<{ image: string}>`
+  background-image: url(${({ image }) => image});
+  height: 100px;
+  width: 100px;
+  color: #99ff00;
+  text-shadow: black 0 0 10px;
+  text-align: left;
+`;
+
+const ShopUpgrade = styled.div`
+  background-image: url(${testImage});
+  border: 5px solid;
+  border-color: #584d3b;
+  height: 100px;
+  width: 100px;
+  color: #99ff00;
+  text-shadow: black 0 0 10px;
+`;
+
+const ShopElement = ({ value }: ShopElementProps) => {
   return (
     <ShopElementWrapper>
       <ShopLeftElement>
-        <ShopImage>{value.startPotatoPerSec}</ShopImage>
+        <ShopImage image={value.image}>{value.startPotatoPerSec}</ShopImage>
         <div>
           <h3>{value.name}</h3>
         </div>

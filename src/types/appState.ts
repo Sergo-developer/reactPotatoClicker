@@ -1,4 +1,5 @@
 export type ShopItem = {
+  id: number;
   name: string;
   image: string;
   amount: number;
@@ -9,6 +10,7 @@ export type ShopItem = {
 };
 
 export type ClickShopItem = {
+  id: number;
   name: string;
   image: string;
   upgradeLevel: number;

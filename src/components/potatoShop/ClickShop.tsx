@@ -14,7 +14,7 @@ const ClickShop = ({ clickShop }: ClickShopProps) => {
   return (
     <ClickShopWrapper>
       {clickShop.map((el) => (
-        <ClickShopElement value={el} />
+        <ClickShopElement key={el.id} value={el} />
       ))}
     </ClickShopWrapper>
   );
