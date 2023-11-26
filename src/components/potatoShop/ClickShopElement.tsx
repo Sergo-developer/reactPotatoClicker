@@ -1,6 +1,6 @@
 import { ClickShopItem } from '../../types/appState';
 import styled from 'styled-components';
-import upgradeIco from '../../assets/images/disable_shovel.png';
+// import upgradeIco from '../../assets/images/disable_shovel.png';
 
 type ClickShopElementProps = {
   value: ClickShopItem;

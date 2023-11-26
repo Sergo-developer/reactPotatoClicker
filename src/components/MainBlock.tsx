@@ -39,6 +39,8 @@ const Potato = styled.div`
   background-position: center;
   transition-duration: 0.5s;
   cursor: pointer;
+  user-select: none;
+
 
   &:hover {
     width: 248px;
@@ -57,6 +59,7 @@ const Potato = styled.div`
 const PotatoesPerClick = styled(PotatoesPerSec)`
   background-image: url(${spruceLog});
   text-align: center;
+  user-select: none;
 `;
 
 const MainBlock = ({ state, onPotatoClick }: MainBlockProps) => {

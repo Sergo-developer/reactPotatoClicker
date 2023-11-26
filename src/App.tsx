@@ -77,15 +77,20 @@ const App = () => {
     potatoClickSound: [potatoSound1, potatoSound2, potatoSound3],
   });
 
-  const [playSound] = useSound(
-    state.potatoClickSound[Math.floor(Math.random() * state.potatoClickSound.length)],
-  );
+  const getPotatoClickSound = () => {
+    const randomPotatoSoundIndex = Math.floor(Math.random() * state.potatoClickSound.length);
+
+    return state.potatoClickSound[randomPotatoSoundIndex];
+  };
+
+  const [playSound] = useSound(getPotatoClickSound());
 
   const onPotatoClick = () => {
     setState({
       ...state,
       totalPotatoes: state.potatoesPerClick + state.totalPotatoes,
     });
+    
     playSound();
   };
 

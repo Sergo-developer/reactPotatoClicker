@@ -26,8 +26,8 @@ const ShopLeftElement = styled.div`
   text-align: center;
 `;
 
-const ShopImage = styled.div<{ image: string}>`
-  background-image: url(${({ image }) => image});
+const ShopImage = styled.div<{ $image: string}>`
+  background-image: url(${({ $image }) => $image});
   height: 100px;
   width: 100px;
   color: #99ff00;
@@ -49,7 +49,7 @@ const ShopElement = ({ value }: ShopElementProps) => {
   return (
     <ShopElementWrapper>
       <ShopLeftElement>
-        <ShopImage image={value.image}>{value.startPotatoPerSec}</ShopImage>
+        <ShopImage $image={value.image}>{value.startPotatoPerSec}</ShopImage>
         <div>
           <h3>{value.name}</h3>
         </div>
