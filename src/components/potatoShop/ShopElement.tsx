@@ -5,6 +5,8 @@ import testImage from '../../assets/images/Iron_upgrade.png';
 
 type ShopElementProps = {
   value: ShopItem;
+  onShopClick: (id: number) => void;
+  onShopUpgradeClick: (id: number) => void;
 };
 
 const ShopElementWrapper = styled.div`
@@ -26,7 +28,7 @@ const ShopLeftElement = styled.div`
   text-align: center;
 `;
 
-const ShopImage = styled.div<{ $image: string}>`
+const ShopImage = styled.div<{ $image: string }>`
   background-image: url(${({ $image }) => $image});
   height: 100px;
   width: 100px;
@@ -45,24 +47,36 @@ const ShopUpgrade = styled.div`
   text-shadow: black 0 0 10px;
 `;
 
-const ShopElement = ({ value }: ShopElementProps) => {
+const ShopElement = ({ value, onShopClick, onShopUpgradeClick }: ShopElementProps) => {
+  const upgrade = () => {
+    if (value.upgradeLevel > 1) {
+      return;
+    }
+
+    onShopUpgradeClick(value.id)
+  };
+
   return (
     <ShopElementWrapper>
-      <ShopLeftElement>
-        <ShopImage $image={value.image}>{value.startPotatoPerSec}</ShopImage>
+      <ShopLeftElement onClick={() => onShopClick(value.id)}>
+        <ShopImage $image={value.image}>
+          {value.startPotatoPerSec * 2 ** value.upgradeLevel * value.amount}
+        </ShopImage>
         <div>
           <h3>{value.name}</h3>
         </div>
         <div>
           <h3>Цена</h3>
-          {value.priceIncreaseByAmount}
+          {value.priceIncreaseByAmount * value.amount + value.startPrice}
         </div>
         <div>
           <h3>Количество</h3>
           {value.amount}
         </div>
       </ShopLeftElement>
-      <ShopUpgrade>1к</ShopUpgrade>
+      <ShopUpgrade onClick={upgrade}>
+        {10 ** (value.id - 1 + value.upgradeLevel)}k
+      </ShopUpgrade>
     </ShopElementWrapper>
   );
 };

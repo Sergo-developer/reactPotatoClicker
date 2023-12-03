@@ -4,6 +4,8 @@ import ShopElement from './ShopElement';
 
 type ShopProps = {
   shop: ShopItem[];
+  onShopClick: (id: number) => void;
+  onShopUpgradeClick: (id: number) => void;
 };
 
 const ShopWrapper = styled.div`
@@ -11,11 +13,16 @@ const ShopWrapper = styled.div`
   gap: 10px;
 `;
 
-const Shop = ({ shop }: ShopProps) => {
+const Shop = ({ shop, onShopClick, onShopUpgradeClick }: ShopProps) => {
   return (
     <ShopWrapper>
       {shop.map((el) => (
-        <ShopElement key={el.id} value={el} />
+        <ShopElement
+          key={el.id}
+          value={el}
+          onShopClick={onShopClick}
+          onShopUpgradeClick={onShopUpgradeClick}
+        />
       ))}
     </ShopWrapper>
   );

@@ -5,4 +5,5 @@
 
 body {
   font-family: 'MinecraftRus', sans-serif;
+  user-select: none;
 }

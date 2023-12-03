@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { AppState } from '../types/appState';
+import { AppState, ComputedState } from '../types/appState';
 import potatoImage from '../assets/images/potato.png';
 import dirtImage from '../assets/images/dirt.png';
 import spruceLog from '../assets/images/spruce_log.png';
@@ -8,6 +8,7 @@ type OnPotatoClick = () => void;
 
 type MainBlockProps = {
   state: AppState;
+  computedState: ComputedState;
   onPotatoClick: OnPotatoClick;
 };
 
@@ -62,13 +63,13 @@ const PotatoesPerClick = styled(PotatoesPerSec)`
   user-select: none;
 `;
 
-const MainBlock = ({ state, onPotatoClick }: MainBlockProps) => {
+const MainBlock = ({ state, computedState, onPotatoClick }: MainBlockProps) => {
   return (
     <MainBlockWrapper>
       <TotalPotatoes>Картошка {state.totalPotatoes}</TotalPotatoes>
-      <PotatoesPerSec>Картошка/сек {state.potatoesPerSec}</PotatoesPerSec>
+      <PotatoesPerSec>Картошка/сек {computedState.potatoesPerSec}</PotatoesPerSec>
       <Potato onClick={onPotatoClick}/>
-      <PotatoesPerClick>{state.potatoesPerClick}/клик</PotatoesPerClick>
+      <PotatoesPerClick>{computedState.potatoesPerClick}/клик</PotatoesPerClick>
     </MainBlockWrapper>
   );
 };
