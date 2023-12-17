@@ -18,7 +18,7 @@ import clickerShop2upgrade2 from './assets/images/farm_iron.png';
 import clickerShop3upgrade2 from './assets/images/vitaly_1.png';
 
 import clickerShop1upgrade3 from './assets/images/diamond_hoe.png';
-import clickerShop2upgrade3 from './assets/images/diamond_farm.png';
+import clickerShop2upgrade3 from './assets/images/diamond_iron.png';
 import clickerShop3upgrade3 from './assets/images/vitaly_2.png';
 
 import clickerShopUpgradeDisable1 from './assets/images/disable_shovel.png';
@@ -33,6 +33,8 @@ const App = () => {
         id: 1,
         name: 'Мотыга',
         image: clickerShop1upgrade1,
+        image2: clickerShop1upgrade2,
+        image3: clickerShop1upgrade3,
         amount: 0,
         startPotatoPerSec: 1,
         startPrice: 15,
@@ -43,6 +45,8 @@ const App = () => {
         id: 2,
         name: 'Ферма',
         image: clickerShop2upgrade1,
+        image2: clickerShop2upgrade2,
+        image3: clickerShop2upgrade3,
         amount: 0,
         startPotatoPerSec: 10,
         startPrice: 150,
@@ -53,6 +57,8 @@ const App = () => {
         id: 3,
         name: 'Виталик',
         image: clickerShop3upgrade1,
+        image2: clickerShop3upgrade2,
+        image3: clickerShop3upgrade3,
         amount: 0,
         startPotatoPerSec: 10,
         startPrice: 150,

@@ -2,6 +2,8 @@ export type ShopItem = {
   id: number;
   name: string;
   image: string;
+  image2: string;
+  image3: string;
   amount: number;
   startPotatoPerSec: number;
   startPrice: number;
