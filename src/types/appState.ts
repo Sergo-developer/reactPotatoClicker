@@ -15,6 +15,9 @@ export type ClickShopItem = {
   id: number;
   name: string;
   image: string;
+  image2: string;
+  image3: string;
+  image4: string;
   upgradeLevel: number;
 };
 

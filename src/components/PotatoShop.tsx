@@ -6,10 +6,12 @@ import { ClickShopItem, ShopItem } from '../types/appState';
 import Shop from './potatoShop/Shop';
 
 type PotatoShopProps = {
+  totalPotatoes: number;
   clickShop: ClickShopItem[];
   shop: ShopItem[];
   onShopClick: (id: number) => void;
   onShopUpgradeClick: (id: number) => void;
+  onClickShopUpgradeClick: (id: number) => void;
 };
 
 const PotatoBlockWrapper = styled.div`
@@ -18,11 +20,18 @@ const PotatoBlockWrapper = styled.div`
   background-image: url(${planksImage});
 `;
 
-const PotatoShop = ({ clickShop, shop, onShopClick, onShopUpgradeClick }: PotatoShopProps) => {
+const PotatoShop = ({
+  totalPotatoes,
+  clickShop,
+  shop,
+  onClickShopUpgradeClick,
+  onShopClick,
+  onShopUpgradeClick,
+}: PotatoShopProps) => {
   return (
     <PotatoBlockWrapper>
-      <ClickShop clickShop={clickShop} />
-      <Shop shop={shop} onShopClick={onShopClick} onShopUpgradeClick={onShopUpgradeClick}/>
+      <ClickShop totalPotatoes={totalPotatoes} clickShop={clickShop} onClickShopUpgradeClick={onClickShopUpgradeClick} />
+      <Shop totalPotatoes={totalPotatoes} shop={shop} onShopClick={onShopClick} onShopUpgradeClick={onShopUpgradeClick} />
     </PotatoBlockWrapper>
   );
 };

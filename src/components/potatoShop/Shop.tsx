@@ -3,6 +3,7 @@ import { ShopItem } from '../../types/appState';
 import ShopElement from './ShopElement';
 
 type ShopProps = {
+  totalPotatoes: number;
   shop: ShopItem[];
   onShopClick: (id: number) => void;
   onShopUpgradeClick: (id: number) => void;
@@ -13,11 +14,12 @@ const ShopWrapper = styled.div`
   gap: 10px;
 `;
 
-const Shop = ({ shop, onShopClick, onShopUpgradeClick }: ShopProps) => {
+const Shop = ({totalPotatoes, shop, onShopClick, onShopUpgradeClick }: ShopProps) => {
   return (
     <ShopWrapper>
       {shop.map((el) => (
         <ShopElement
+          totalPotatoes={totalPotatoes}
           key={el.id}
           value={el}
           onShopClick={onShopClick}

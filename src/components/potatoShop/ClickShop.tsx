@@ -3,18 +3,20 @@ import { ClickShopItem } from '../../types/appState';
 import ClickShopElement from './ClickShopElement';
 
 type ClickShopProps = {
+  totalPotatoes: number;
   clickShop: ClickShopItem[];
+  onClickShopUpgradeClick: (id: number) => void;
 };
 
 const ClickShopWrapper = styled.div`
-    display: inline-flex;
+  display: inline-flex;
 `;
 
-const ClickShop = ({ clickShop }: ClickShopProps) => {
+const ClickShop = ({totalPotatoes, clickShop, onClickShopUpgradeClick }: ClickShopProps) => {
   return (
     <ClickShopWrapper>
       {clickShop.map((el) => (
-        <ClickShopElement key={el.id} value={el} />
+        <ClickShopElement totalPotatoes={totalPotatoes} key={el.id} value={el} onClickShopUpgradeClick={onClickShopUpgradeClick} />
       ))}
     </ClickShopWrapper>
   );

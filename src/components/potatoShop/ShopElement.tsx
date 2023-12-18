@@ -12,6 +12,7 @@ import upgradeButtonImage3 from '../../assets/images/last_upgrade.png';
 import { useState } from 'react';
 
 type ShopElementProps = {
+  totalPotatoes: number;
   value: ShopItem;
   onShopClick: (id: number) => void;
   onShopUpgradeClick: (id: number) => void;
@@ -53,18 +54,27 @@ const ShopUpgrade = styled.div<{ $buttonImage: string }>`
   width: 100px;
   color: #99ff00;
   text-shadow: black 0 0 10px;
+  cursor: pointer;
 `;
 
-const ShopElement = ({ value, onShopClick, onShopUpgradeClick }: ShopElementProps) => {
+const ShopElement = ({
+  totalPotatoes,
+  value,
+  onShopClick,
+  onShopUpgradeClick,
+}: ShopElementProps) => {
   const upgrade = () => {
     if (value.upgradeLevel > 1) {
       return;
     }
 
     onShopUpgradeClick(value.id);
-    onCLickIcoChanger();
 
-    console.log(value.upgradeLevel);
+    if (totalPotatoes < 1000 * 10 ** (value.id - 1 + value.upgradeLevel)) {
+      return;
+    }
+
+    onCLickIcoChanger();
   };
 
   const [upgradeIco, setUpgradeIco] = useState({

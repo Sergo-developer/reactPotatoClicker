@@ -21,13 +21,27 @@ import clickerShop1upgrade3 from './assets/images/diamond_hoe.png';
 import clickerShop2upgrade3 from './assets/images/diamond_iron.png';
 import clickerShop3upgrade3 from './assets/images/vitaly_2.png';
 
-import clickerShopUpgradeDisable1 from './assets/images/disable_shovel.png';
+import clickerShop1UpgradeDisable1 from './assets/images/disable_shovel.png';
+import clickerShop1Upgrade1 from './assets/images/wooden_shovel.png';
+import clickerShop1Upgrade2 from './assets/images/iron_shovel.png';
+import clickerShop1Upgrade3 from './assets/images/diamond_shovel.png';
+
 import clickerShopUpgradeDisable2 from './assets/images/disable_bone_meal.png';
+import clickerShop2Upgrade1 from './assets/images/bone_meal.png';
+import clickerShop2Upgrade2 from './assets/images/fertilizer.png';
+import clickerShop2Upgrade3 from './assets/images/fertilizer_2.png';
+
+
 import clickerShopUpgradeDisable3 from './assets/images/disable_potato_reaper.png';
+import clickerShop3Upgrade1 from './assets/images/potato_reaper.png';
+import clickerShop3Upgrade2 from './assets/images/iron_potato_reaper.png';
+import clickerShop3Upgrade3 from './assets/images/diamond_potato_reaper.png';
+
+
 
 const App = () => {
   const [state, setState] = useState<AppState>({
-    totalPotatoes: 10000000,
+    totalPotatoes: 90000000,
     shop: [
       {
         id: 1,
@@ -70,19 +84,28 @@ const App = () => {
       {
         id: 1,
         name: 'shovel',
-        image: clickerShopUpgradeDisable1,
+        image: clickerShop1UpgradeDisable1,
+        image2: clickerShop1Upgrade1,
+        image3: clickerShop1Upgrade2,
+        image4: clickerShop1Upgrade3,
         upgradeLevel: 0,
       },
       {
         id: 2,
         name: 'fertilizer',
         image: clickerShopUpgradeDisable2,
+        image2: clickerShop2Upgrade1,
+        image3: clickerShop2Upgrade2,
+        image4: clickerShop2Upgrade3,
         upgradeLevel: 0,
       },
       {
         id: 3,
         name: 'reaper',
         image: clickerShopUpgradeDisable3,
+        image2: clickerShop3Upgrade1,
+        image3: clickerShop3Upgrade2,
+        image4: clickerShop3Upgrade3,
         upgradeLevel: 0,
       },
     ],
@@ -138,7 +161,8 @@ const App = () => {
     }, 0);
 
     const newPotatoesPerClick = state.clickShop.reduce((acc, el) => {
-      return acc + el.upgradeLevel;
+      // return acc + el.upgradeLevel;
+      return Math.floor(acc + newPotatoesPerSecToAdd / 100 * 10 * el.upgradeLevel);
     }, 1);
 
     setComputedState({
@@ -201,12 +225,41 @@ const App = () => {
     });
   };
 
+  const onClickShopUpgradeClick = (id: number) => {
+    const clickedUpgradeElementIndex = state.clickShop.findIndex((el) => el.id === id);
+    const clickedUpgradeElement = state.clickShop[clickedUpgradeElementIndex];
+
+    if (!clickedUpgradeElement) {
+      return;
+    }
+
+    const currentPrice = 1000 * 10 ** (clickedUpgradeElement.id - 1 + clickedUpgradeElement.upgradeLevel);
+
+    if (state.totalPotatoes < currentPrice) {
+      return;
+    }
+
+    const newTotalPotatoes = state.totalPotatoes - currentPrice;
+    
+    const newUpgradeLevel = clickedUpgradeElement.upgradeLevel + 1;
+    const newShopElement = { ...clickedUpgradeElement, upgradeLevel: newUpgradeLevel };
+    const newShop = state.clickShop.with(clickedUpgradeElementIndex, newShopElement);
+
+    setState({
+      ...state,
+      totalPotatoes: newTotalPotatoes,
+      clickShop: newShop,
+    });
+  };
+
   return (
     <>
       <MainBlock state={state} computedState={computedState} onPotatoClick={onPotatoClick} />
       <PotatoShop
         clickShop={state.clickShop}
+        totalPotatoes={state.totalPotatoes}
         shop={state.shop}
+        onClickShopUpgradeClick={onClickShopUpgradeClick}
         onShopClick={onShopClick}
         onShopUpgradeClick={onShopUpgradeClick}
       />
