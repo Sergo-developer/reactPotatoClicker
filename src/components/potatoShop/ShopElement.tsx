@@ -42,7 +42,7 @@ const ShopImage = styled.div<{ $image: string }>`
   height: 100px;
   width: 100px;
   color: #99ff00;
-  text-shadow: black 0 0 10px;
+  text-shadow: black 0 0 3px;
   text-align: left;
 `;
 
@@ -53,7 +53,7 @@ const ShopUpgrade = styled.div<{ $buttonImage: string }>`
   height: 100px;
   width: 100px;
   color: #99ff00;
-  text-shadow: black 0 0 10px;
+  text-shadow: black 0 0 3px;
   cursor: pointer;
 `;
 
@@ -101,6 +101,12 @@ const ShopElement = ({
       });
   };
 
+  const PriceReturn = () => {
+    if (upgradeIco.upgradeLevelPlus === 3) return ' ';
+
+    return 10 ** (value.id - 1 + value.upgradeLevel) + 'k';
+  };
+
   return (
     <ShopElementWrapper>
       <ShopLeftElement
@@ -123,7 +129,7 @@ const ShopElement = ({
         </div>
       </ShopLeftElement>
       <ShopUpgrade $buttonImage={upgradeIco.upgradeButtonIco} onClick={upgrade}>
-        {10 ** (value.id - 1 + value.upgradeLevel)}k
+        {PriceReturn()}
       </ShopUpgrade>
     </ShopElementWrapper>
   );

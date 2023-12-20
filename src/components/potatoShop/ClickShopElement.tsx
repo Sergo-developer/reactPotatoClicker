@@ -19,7 +19,7 @@ const ClickShopImage = styled.div<{ $image: string }>`
   cursor: pointer;
   margin-left: 10px;
   color: #99ff00;
-  text-shadow: black 0 0 10px;
+  text-shadow: black 0 0 3px;
 `;
 
 const ClickShopElementPrice = styled.div`
@@ -69,10 +69,16 @@ const ClickShopElement = ({
       });
   };
 
+  const PriceReturn = () => {
+    if (upgradeIco.upgradeLevelPlus === 4) return ' ';
+
+    return(10 ** (value.id - 1 + value.upgradeLevel) + 'k');
+  };
+
   return (
     <ClickShopImage $image={upgradeIco.shopIco} onClick={clickUpgrade}>
       <>{10 * value.upgradeLevel}%</>
-      <ClickShopElementPrice> {10 ** (value.id - 1 + value.upgradeLevel)}k </ClickShopElementPrice>
+      <ClickShopElementPrice>{PriceReturn()}</ClickShopElementPrice>
     </ClickShopImage>
   );
 };

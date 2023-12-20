@@ -9,6 +9,10 @@ import potatoSound1 from './assets/sounds/potato_1.ogg';
 import potatoSound2 from './assets/sounds/potato_2.ogg';
 import potatoSound3 from './assets/sounds/potato_3.ogg';
 
+import upgradeSound from './assets/sounds/upgrade_sound_1.ogg';
+import finalUpgradeSound from './assets/sounds/upgrade_sound_2.ogg';
+import popSound from './assets/sounds/pop.ogg';
+
 import clickerShop1upgrade1 from './assets/images/wooden_hoe.png';
 import clickerShop2upgrade1 from './assets/images/farm.png';
 import clickerShop3upgrade1 from './assets/images/vitaly.png';
@@ -31,17 +35,14 @@ import clickerShop2Upgrade1 from './assets/images/bone_meal.png';
 import clickerShop2Upgrade2 from './assets/images/fertilizer.png';
 import clickerShop2Upgrade3 from './assets/images/fertilizer_2.png';
 
-
 import clickerShopUpgradeDisable3 from './assets/images/disable_potato_reaper.png';
 import clickerShop3Upgrade1 from './assets/images/potato_reaper.png';
 import clickerShop3Upgrade2 from './assets/images/iron_potato_reaper.png';
 import clickerShop3Upgrade3 from './assets/images/diamond_potato_reaper.png';
 
-
-
 const App = () => {
   const [state, setState] = useState<AppState>({
-    totalPotatoes: 90000000,
+    totalPotatoes: 0,
     shop: [
       {
         id: 1,
@@ -74,9 +75,9 @@ const App = () => {
         image2: clickerShop3upgrade2,
         image3: clickerShop3upgrade3,
         amount: 0,
-        startPotatoPerSec: 10,
-        startPrice: 150,
-        priceIncreaseByAmount: 25,
+        startPotatoPerSec: 100,
+        startPrice: 1500,
+        priceIncreaseByAmount: 250,
         upgradeLevel: 0,
       },
     ],
@@ -161,8 +162,7 @@ const App = () => {
     }, 0);
 
     const newPotatoesPerClick = state.clickShop.reduce((acc, el) => {
-      // return acc + el.upgradeLevel;
-      return Math.floor(acc + newPotatoesPerSecToAdd / 100 * 10 * el.upgradeLevel);
+      return Math.floor(acc + (newPotatoesPerSecToAdd / 100) * 10 * el.upgradeLevel);
     }, 1);
 
     setComputedState({
@@ -171,7 +171,10 @@ const App = () => {
     });
   }, [state]);
 
+  const [OnShopClickSoundPlay] = useSound(popSound);
+
   const onShopClick = (id: number) => {
+
     const clickedElementIndex = state.shop.findIndex((el) => el.id === id);
     const clickedElement = state.shop[clickedElementIndex];
 
@@ -196,7 +199,12 @@ const App = () => {
       totalPotatoes: newTotalPotatoes,
       shop: newShop,
     });
+    
+    OnShopClickSoundPlay();
   };
+
+  const [playUpgradeSound] = useSound(upgradeSound);
+  const [playfinalUpgradeSound] = useSound(finalUpgradeSound);
 
   const onShopUpgradeClick = (id: number) => {
     const clickedUpgradeElementIndex = state.shop.findIndex((el) => el.id === id);
@@ -206,14 +214,15 @@ const App = () => {
       return;
     }
 
-    const currentPrice = 1000 * 10 ** (clickedUpgradeElement.id - 1 + clickedUpgradeElement.upgradeLevel);
+    const currentPrice =
+      1000 * 10 ** (clickedUpgradeElement.id - 1 + clickedUpgradeElement.upgradeLevel);
 
     if (state.totalPotatoes < currentPrice) {
       return;
     }
 
     const newTotalPotatoes = state.totalPotatoes - currentPrice;
-    
+
     const newUpgradeLevel = clickedUpgradeElement.upgradeLevel + 1;
     const newShopElement = { ...clickedUpgradeElement, upgradeLevel: newUpgradeLevel };
     const newShop = state.shop.with(clickedUpgradeElementIndex, newShopElement);
@@ -223,6 +232,14 @@ const App = () => {
       totalPotatoes: newTotalPotatoes,
       shop: newShop,
     });
+
+    if (clickedUpgradeElement.upgradeLevel === 1) {
+      playfinalUpgradeSound();
+
+      return;
+    }
+
+    playUpgradeSound();
   };
 
   const onClickShopUpgradeClick = (id: number) => {
@@ -233,14 +250,15 @@ const App = () => {
       return;
     }
 
-    const currentPrice = 1000 * 10 ** (clickedUpgradeElement.id - 1 + clickedUpgradeElement.upgradeLevel);
+    const currentPrice =
+      1000 * 10 ** (clickedUpgradeElement.id - 1 + clickedUpgradeElement.upgradeLevel);
 
     if (state.totalPotatoes < currentPrice) {
       return;
     }
 
     const newTotalPotatoes = state.totalPotatoes - currentPrice;
-    
+
     const newUpgradeLevel = clickedUpgradeElement.upgradeLevel + 1;
     const newShopElement = { ...clickedUpgradeElement, upgradeLevel: newUpgradeLevel };
     const newShop = state.clickShop.with(clickedUpgradeElementIndex, newShopElement);
@@ -250,6 +268,14 @@ const App = () => {
       totalPotatoes: newTotalPotatoes,
       clickShop: newShop,
     });
+
+    if (clickedUpgradeElement.upgradeLevel === 2) {
+      playfinalUpgradeSound();
+
+      return;
+    }
+
+    playUpgradeSound();
   };
 
   return (
