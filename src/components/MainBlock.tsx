@@ -1,16 +1,10 @@
 import styled from 'styled-components';
-import { AppState, ComputedState } from '../types/appState';
 import potatoImage from '../assets/images/potato.png';
 import dirtImage from '../assets/images/dirt.png';
 import spruceLog from '../assets/images/spruce_log.png';
-
-type OnPotatoClick = () => void;
-
-type MainBlockProps = {
-  state: AppState;
-  computedState: ComputedState;
-  onPotatoClick: OnPotatoClick;
-};
+import useComputedState from '../hooks/useComputedState';
+import useAppState from '../hooks/useAppState';
+import usePotatoSound from '../hooks/usePotatoSound';
 
 const MainBlockWrapper = styled.div`
   display: grid;
@@ -42,7 +36,6 @@ const Potato = styled.div`
   cursor: pointer;
   user-select: none;
 
-
   &:hover {
     width: 248px;
     height: 210px;
@@ -63,12 +56,25 @@ const PotatoesPerClick = styled(PotatoesPerSec)`
   user-select: none;
 `;
 
-const MainBlock = ({ state, computedState, onPotatoClick }: MainBlockProps) => {
+const MainBlock = () => {
+  const [appState, setAppState] = useAppState();
+  const [computedState] = useComputedState();
+  const { playPotatoSound } = usePotatoSound();
+
+  const onPotatoClick = () => {
+    setAppState({
+      ...appState,
+      totalPotatoes: computedState.potatoesPerClick + appState.totalPotatoes,
+    });
+
+    playPotatoSound();
+  };
+
   return (
     <MainBlockWrapper>
-      <TotalPotatoes>Картошка {state.totalPotatoes}</TotalPotatoes>
+      <TotalPotatoes>Картошка {appState.totalPotatoes}</TotalPotatoes>
       <PotatoesPerSec>Картошка/сек {computedState.potatoesPerSec}</PotatoesPerSec>
-      <Potato onClick={onPotatoClick}/>
+      <Potato onClick={onPotatoClick} />
       <PotatoesPerClick>{computedState.potatoesPerClick}/клик</PotatoesPerClick>
     </MainBlockWrapper>
   );

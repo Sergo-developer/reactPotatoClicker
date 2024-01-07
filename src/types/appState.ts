@@ -1,9 +1,7 @@
 export type ShopItem = {
   id: number;
   name: string;
-  image: string;
-  image2: string;
-  image3: string;
+  images: string[];
   amount: number;
   startPotatoPerSec: number;
   startPrice: number;
@@ -14,10 +12,7 @@ export type ShopItem = {
 export type ClickShopItem = {
   id: number;
   name: string;
-  image: string;
-  image2: string;
-  image3: string;
-  image4: string;
+  images: string[];
   upgradeLevel: number;
 };
 
@@ -25,7 +20,6 @@ export type AppState = {
   totalPotatoes: number;
   shop: ShopItem[];
   clickShop: ClickShopItem[];
-  potatoClickSound: string[];
 };
 
 export type ComputedState = {

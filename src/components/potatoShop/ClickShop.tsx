@@ -1,22 +1,18 @@
 import styled from 'styled-components';
-import { ClickShopItem } from '../../types/appState';
 import ClickShopElement from './ClickShopElement';
-
-type ClickShopProps = {
-  totalPotatoes: number;
-  clickShop: ClickShopItem[];
-  onClickShopUpgradeClick: (id: number) => void;
-};
+import useAppState from '../../hooks/useAppState';
 
 const ClickShopWrapper = styled.div`
   display: inline-flex;
 `;
 
-const ClickShop = ({totalPotatoes, clickShop, onClickShopUpgradeClick }: ClickShopProps) => {
+const ClickShop = () => {
+  const [appState] = useAppState();
+
   return (
     <ClickShopWrapper>
-      {clickShop.map((el) => (
-        <ClickShopElement totalPotatoes={totalPotatoes} key={el.id} value={el} onClickShopUpgradeClick={onClickShopUpgradeClick} />
+      {appState.clickShop.map((el) => (
+        <ClickShopElement key={el.id} value={el} />
       ))}
     </ClickShopWrapper>
   );

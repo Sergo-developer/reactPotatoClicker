@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ClickShopItem } from '../../types/appState';
 import styled from 'styled-components';
+import useAppState from '../../hooks/useAppState';
+import usePotatoSound from '../../hooks/usePotatoSound';
 // import upgradeIco from '../../assets/images/disable_shovel.png';
 
 type ClickShopElementProps = {
-  totalPotatoes: number;
   value: ClickShopItem;
-  onClickShopUpgradeClick: (id: number) => void;
 };
 
 const ClickShopImage = styled.div<{ $image: string }>`
@@ -27,58 +27,53 @@ const ClickShopElementPrice = styled.div`
   align-items: flex-end;
 `;
 
-const ClickShopElement = ({
-  totalPotatoes,
-  value,
-  onClickShopUpgradeClick,
-}: ClickShopElementProps) => {
-  const clickUpgrade = () => {
-    if (value.upgradeLevel >= 3) {
+const ClickShopElement = ({ value }: ClickShopElementProps) => {
+  const [upgradeIcon, setUpgradeIcon] = useState(value.images[value.upgradeLevel]);
+  const [appState, setAppState] = useAppState();
+  const [price, setPrice] = useState<number>(0);
+  const { playUpgradeSound, playFinalUpgradeSound } = usePotatoSound();
+
+  useEffect(() => {
+    setUpgradeIcon(value.images[value.upgradeLevel]);
+    setPrice(1000 * 10 ** (value.id - 1 + value.upgradeLevel));
+  }, [value.upgradeLevel]);
+
+  const onUpgradeClick = () => {
+    if (value.upgradeLevel === 3) {
       return;
     }
 
-    onClickShopUpgradeClick(value.id);
+    const currentPrice = 1000 * 10 ** (value.id - 1 + value.upgradeLevel);
 
-    if (totalPotatoes < 1000 * 10 ** (value.id - 1 + value.upgradeLevel)) {
+    if (appState.totalPotatoes < currentPrice) {
       return;
     }
 
-    onCLickIcoChanger();
-  };
+    const newTotalPotatoes = appState.totalPotatoes - currentPrice;
 
-  const [upgradeIco, setUpgradeIco] = useState({
-    shopIco: value.image,
-    upgradeLevelPlus: value.upgradeLevel + 1,
-  });
+    const newUpgradeLevel = value.upgradeLevel + 1;
+    const newShopElement = { ...value, upgradeLevel: newUpgradeLevel };
+    const newShop = appState.clickShop.with(value.id - 1, newShopElement);
 
-  const onCLickIcoChanger = () => {
-    if (upgradeIco.upgradeLevelPlus === 1)
-      setUpgradeIco({
-        shopIco: value.image2,
-        upgradeLevelPlus: upgradeIco.upgradeLevelPlus + 1,
-      });
-    else if (upgradeIco.upgradeLevelPlus === 2)
-      setUpgradeIco({
-        shopIco: value.image3,
-        upgradeLevelPlus: upgradeIco.upgradeLevelPlus + 1,
-      });
-    else if (upgradeIco.upgradeLevelPlus === 3)
-      setUpgradeIco({
-        shopIco: value.image4,
-        upgradeLevelPlus: upgradeIco.upgradeLevelPlus + 1,
-      });
-  };
+    setAppState({
+      ...appState,
+      totalPotatoes: newTotalPotatoes,
+      clickShop: newShop,
+    });
 
-  const PriceReturn = () => {
-    if (upgradeIco.upgradeLevelPlus === 4) return ' ';
+    if (value.upgradeLevel === 2) {
+      playFinalUpgradeSound();
 
-    return(10 ** (value.id - 1 + value.upgradeLevel) + 'k');
+      return;
+    }
+
+    playUpgradeSound();
   };
 
   return (
-    <ClickShopImage $image={upgradeIco.shopIco} onClick={clickUpgrade}>
+    <ClickShopImage $image={upgradeIcon} onClick={() => onUpgradeClick()}>
       <>{10 * value.upgradeLevel}%</>
-      <ClickShopElementPrice>{PriceReturn()}</ClickShopElementPrice>
+      <ClickShopElementPrice>{value.upgradeLevel < 3 ? price : ''}</ClickShopElementPrice>
     </ClickShopImage>
   );
 };
