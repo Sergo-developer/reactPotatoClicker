@@ -5,17 +5,16 @@ import strippedOakLog from '../../assets/images/stripped_oak_log.png';
 import ironBlock from '../../assets/images/iron_block.png';
 import diamondBlock from '../../assets/images/diamond_block.png';
 
-import upgradeButtonImage from '../../assets/images/Iron_upgrade.png';
+import upgradeButtonImage1 from '../../assets/images/Iron_upgrade.png';
 import upgradeButtonImage2 from '../../assets/images/diamond_upgrade.png';
 import upgradeButtonImage3 from '../../assets/images/last_upgrade.png';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import useAppState from '../../hooks/useAppState';
+import usePotatoSound from '../../hooks/usePotatoSound';
 
 type ShopElementProps = {
-  totalPotatoes: number;
   value: ShopItem;
-  onShopClick: (id: number) => void;
-  onShopUpgradeClick: (id: number) => void;
 };
 
 const ShopElementWrapper = styled.div`
@@ -57,63 +56,86 @@ const ShopUpgrade = styled.div<{ $buttonImage: string }>`
   cursor: pointer;
 `;
 
-const ShopElement = ({
-  totalPotatoes,
-  value,
-  onShopClick,
-  onShopUpgradeClick,
-}: ShopElementProps) => {
-  const upgrade = () => {
-    if (value.upgradeLevel > 1) {
+const backgroundIcons = [strippedOakLog, ironBlock, diamondBlock];
+const upgradeIcons = [upgradeButtonImage1, upgradeButtonImage2, upgradeButtonImage3];
+
+const ShopElement = ({ value }: ShopElementProps) => {
+  const [elementIcon, setElementIcon] = useState(value.images[value.upgradeLevel]);
+
+  const [upgradeBackgroundIcon, setUpgradeBackgroundIcon] = useState(
+    backgroundIcons[value.upgradeLevel],
+  );
+
+  const [upgradeIcon, setUpgradeIcon] = useState(upgradeIcons[value.upgradeLevel]);
+  const [appState, setAppState] = useAppState();
+  const [price, setPrice] = useState<number>(0);
+  const { playUpgradeSound, playFinalUpgradeSound, playShopBuySound } = usePotatoSound();
+
+  useEffect(() => {
+    setElementIcon(value.images[value.upgradeLevel]);
+    setUpgradeBackgroundIcon(backgroundIcons[value.upgradeLevel]);
+    setUpgradeIcon(upgradeIcons[value.upgradeLevel]);
+
+    setPrice(1000 * 10 ** (value.id - 1 + value.upgradeLevel));
+  }, [value.upgradeLevel, value.images, value.id]);
+
+  const onUpgradeClick = () => {
+    if (value.upgradeLevel === 2) {
       return;
     }
 
-    onShopUpgradeClick(value.id);
+    const currentPrice = 1000 * 10 ** (value.id - 1 + value.upgradeLevel);
 
-    if (totalPotatoes < 1000 * 10 ** (value.id - 1 + value.upgradeLevel)) {
+    if (appState.totalPotatoes < currentPrice) {
       return;
     }
 
-    onCLickIcoChanger();
+    const newTotalPotatoes = appState.totalPotatoes - currentPrice;
+
+    const newUpgradeLevel = value.upgradeLevel + 1;
+    const newShopElement = { ...value, upgradeLevel: newUpgradeLevel };
+    const newShop = appState.shop.with(value.id - 1, newShopElement);
+
+    setAppState({
+      ...appState,
+      totalPotatoes: newTotalPotatoes,
+      shop: newShop,
+    });
+
+    if (value.upgradeLevel === 1) {
+      playFinalUpgradeSound();
+
+      return;
+    }
+
+    playUpgradeSound();
   };
 
-  const [upgradeIco, setUpgradeIco] = useState({
-    shopIco: value.image,
-    upgradeButtonIco: upgradeButtonImage,
-    upgradeBackgroundIco: strippedOakLog,
-    upgradeLevelPlus: value.upgradeLevel + 1,
-  });
+  const onShopClick = () => {
+    const currentPrice = value.startPrice + value.priceIncreaseByAmount * value.amount;
 
-  const onCLickIcoChanger = () => {
-    if (upgradeIco.upgradeLevelPlus === 1)
-      setUpgradeIco({
-        shopIco: value.image2,
-        upgradeButtonIco: upgradeButtonImage2,
-        upgradeBackgroundIco: ironBlock,
-        upgradeLevelPlus: upgradeIco.upgradeLevelPlus + 1,
-      });
-    else if (upgradeIco.upgradeLevelPlus === 2)
-      setUpgradeIco({
-        shopIco: value.image3,
-        upgradeButtonIco: upgradeButtonImage3,
-        upgradeBackgroundIco: diamondBlock,
-        upgradeLevelPlus: upgradeIco.upgradeLevelPlus + 1,
-      });
-  };
+    if (appState.totalPotatoes < currentPrice) {
+      return;
+    }
 
-  const PriceReturn = () => {
-    if (upgradeIco.upgradeLevelPlus === 3) return ' ';
+    const newTotalPotatoes = appState.totalPotatoes - currentPrice;
+    const newAmount = value.amount + 1;
+    const newShopElement = { ...value, amount: newAmount };
+    const newShop = appState.shop.with(value.id - 1, newShopElement);
 
-    return 10 ** (value.id - 1 + value.upgradeLevel) + 'k';
+    setAppState({
+      ...appState,
+      totalPotatoes: newTotalPotatoes,
+      shop: newShop,
+    });
+
+    playShopBuySound();
   };
 
   return (
     <ShopElementWrapper>
-      <ShopLeftElement
-        $backgroundImage={upgradeIco.upgradeBackgroundIco}
-        onClick={() => onShopClick(value.id)}
-      >
-        <ShopImage $image={upgradeIco.shopIco}>
+      <ShopLeftElement $backgroundImage={upgradeBackgroundIcon} onClick={() => onShopClick()}>
+        <ShopImage $image={elementIcon}>
           {value.startPotatoPerSec * 2 ** value.upgradeLevel * value.amount}
         </ShopImage>
         <div>
@@ -128,8 +150,8 @@ const ShopElement = ({
           {value.amount}
         </div>
       </ShopLeftElement>
-      <ShopUpgrade $buttonImage={upgradeIco.upgradeButtonIco} onClick={upgrade}>
-        {PriceReturn()}
+      <ShopUpgrade $buttonImage={upgradeIcon} onClick={onUpgradeClick}>
+        {value.upgradeLevel < 3 ? price : ''}
       </ShopUpgrade>
     </ShopElementWrapper>
   );

@@ -5,7 +5,6 @@ import MainBlock from './components/MainBlock';
 import useAppState from './hooks/useAppState';
 
 import useComputedState from './hooks/useComputedState';
-import usePotatoSound from './hooks/usePotatoSound';
 
 const App = () => {
   const [appState, setAppState] = useAppState();
@@ -40,71 +39,6 @@ const App = () => {
       potatoesPerClick: newPotatoesPerClick,
     });
   }, [appState]);
-
-  const onShopClick = (id: number) => {
-    const clickedElementIndex = appState.shop.findIndex((el) => el.id === id);
-    const clickedElement = appState.shop[clickedElementIndex];
-
-    if (!clickedElement) {
-      return;
-    }
-
-    const currentPrice =
-      clickedElement.startPrice + clickedElement.priceIncreaseByAmount * clickedElement.amount;
-
-    if (appState.totalPotatoes < currentPrice) {
-      return;
-    }
-
-    const newTotalPotatoes = appState.totalPotatoes - currentPrice;
-    const newAmount = clickedElement.amount + 1;
-    const newShopElement = { ...clickedElement, amount: newAmount };
-    const newShop = appState.shop.with(clickedElementIndex, newShopElement);
-
-    setAppState({
-      ...appState,
-      totalPotatoes: newTotalPotatoes,
-      shop: newShop,
-    });
-
-    shopBuy();
-  };
-
-  const onShopUpgradeClick = (id: number) => {
-    const clickedUpgradeElementIndex = appState.shop.findIndex((el) => el.id === id);
-    const clickedUpgradeElement = appState.shop[clickedUpgradeElementIndex];
-
-    if (!clickedUpgradeElement) {
-      return;
-    }
-
-    const currentPrice =
-      1000 * 10 ** (clickedUpgradeElement.id - 1 + clickedUpgradeElement.upgradeLevel);
-
-    if (appState.totalPotatoes < currentPrice) {
-      return;
-    }
-
-    const newTotalPotatoes = appState.totalPotatoes - currentPrice;
-
-    const newUpgradeLevel = clickedUpgradeElement.upgradeLevel + 1;
-    const newShopElement = { ...clickedUpgradeElement, upgradeLevel: newUpgradeLevel };
-    const newShop = appState.shop.with(clickedUpgradeElementIndex, newShopElement);
-
-    setAppState({
-      ...appState,
-      totalPotatoes: newTotalPotatoes,
-      shop: newShop,
-    });
-
-    if (clickedUpgradeElement.upgradeLevel === 1) {
-      finalUpgrade();
-
-      return;
-    }
-
-    upgrade();
-  };
 
   return (
     <>
