@@ -67,19 +67,34 @@ const useAppState = (): [AppState, React.Dispatch<React.SetStateAction<AppState>
       {
         id: 1,
         name: 'shovel',
-        images: [clickerShop1UpgradeDisable1, clickerShop1Upgrade1, clickerShop1Upgrade2, clickerShop1Upgrade3],
+        images: [
+          clickerShop1UpgradeDisable1,
+          clickerShop1Upgrade1,
+          clickerShop1Upgrade2,
+          clickerShop1Upgrade3,
+        ],
         upgradeLevel: 0,
       },
       {
         id: 2,
         name: 'fertilizer',
-        images: [clickerShopUpgradeDisable2, clickerShop2Upgrade1, clickerShop2Upgrade2, clickerShop2Upgrade3],
+        images: [
+          clickerShopUpgradeDisable2,
+          clickerShop2Upgrade1,
+          clickerShop2Upgrade2,
+          clickerShop2Upgrade3,
+        ],
         upgradeLevel: 0,
       },
       {
         id: 3,
         name: 'reaper',
-        images: [clickerShopUpgradeDisable3,clickerShop3Upgrade1,clickerShop3Upgrade2,clickerShop3Upgrade3],
+        images: [
+          clickerShopUpgradeDisable3,
+          clickerShop3Upgrade1,
+          clickerShop3Upgrade2,
+          clickerShop3Upgrade3,
+        ],
         upgradeLevel: 0,
       },
     ],

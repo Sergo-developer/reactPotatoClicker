@@ -1,29 +1,12 @@
-import { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import './App.css';
 import PotatoShop from './components/PotatoShop';
 import MainBlock from './components/MainBlock';
-import useAppState from './hooks/useAppState';
-
-import useComputedState from './hooks/useComputedState';
+import { AppContext } from './hooks/appStateProvider';
 
 const App = () => {
-  const [appState, setAppState] = useAppState();
-  const [computedState, setComputedState] = useComputedState();
 
-  const addPotatoesByTimer = () => {
-    setAppState((prevState) => ({
-      ...prevState,
-      totalPotatoes: computedState.potatoesPerSec + prevState.totalPotatoes,
-    }));
-  };
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      addPotatoesByTimer();
-    }, 1000);
-
-    return () => clearInterval(intervalId);
-  }, []);
+  const {appState, setComputedState} = useContext(AppContext);
 
   useEffect(() => {
     const newPotatoesPerSecToAdd = appState.shop.reduce((acc, el) => {

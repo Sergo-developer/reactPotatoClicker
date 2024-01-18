@@ -10,8 +10,8 @@ import upgradeButtonImage2 from '../../assets/images/diamond_upgrade.png';
 import upgradeButtonImage3 from '../../assets/images/last_upgrade.png';
 
 import { useEffect, useState } from 'react';
-import useAppState from '../../hooks/useAppState';
 import usePotatoSound from '../../hooks/usePotatoSound';
+import useKek from '../../hooks/useKek';
 
 type ShopElementProps = {
   value: ShopItem;
@@ -67,7 +67,7 @@ const ShopElement = ({ value }: ShopElementProps) => {
   );
 
   const [upgradeIcon, setUpgradeIcon] = useState(upgradeIcons[value.upgradeLevel]);
-  const [appState, setAppState] = useAppState();
+  const {appState, setAppState} = useKek();
   const [price, setPrice] = useState<number>(0);
   const { playUpgradeSound, playFinalUpgradeSound, playShopBuySound } = usePotatoSound();
 

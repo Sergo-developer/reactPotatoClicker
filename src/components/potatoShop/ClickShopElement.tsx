@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { ClickShopItem } from '../../types/appState';
 import styled from 'styled-components';
-import useAppState from '../../hooks/useAppState';
 import usePotatoSound from '../../hooks/usePotatoSound';
+import useKek from '../../hooks/useKek';
 // import upgradeIco from '../../assets/images/disable_shovel.png';
 
 type ClickShopElementProps = {
@@ -29,7 +29,7 @@ const ClickShopElementPrice = styled.div`
 
 const ClickShopElement = ({ value }: ClickShopElementProps) => {
   const [upgradeIcon, setUpgradeIcon] = useState(value.images[value.upgradeLevel]);
-  const [appState, setAppState] = useAppState();
+  const {appState, setAppState} = useKek();
   const [price, setPrice] = useState<number>(0);
   const { playUpgradeSound, playFinalUpgradeSound } = usePotatoSound();
 
