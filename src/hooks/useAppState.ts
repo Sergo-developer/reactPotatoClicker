@@ -30,7 +30,7 @@ import { AppState } from '../types/appState';
 
 const useAppState = (): [AppState, React.Dispatch<React.SetStateAction<AppState>>] => {
   const [state, setState] = useState<AppState>({
-    totalPotatoes: 99999999999,
+    totalPotatoes: 0,
     shop: [
       {
         id: 1,

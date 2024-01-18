@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import ShopElement from './ShopElement';
-import useAppState from '../../hooks/useAppState';
+import useKek from '../../hooks/useKek';
 
 const ShopWrapper = styled.div`
   display: grid;
@@ -8,7 +8,8 @@ const ShopWrapper = styled.div`
 `;
 
 const Shop = () => {
-  const [appState] = useAppState();
+  const {appState} = useKek();
+
   
   return (
     <ShopWrapper>

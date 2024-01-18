@@ -9,8 +9,8 @@ export interface AppContextType{
       computedState: ComputedState;
        setComputedState: React.Dispatch<React.SetStateAction<ComputedState>>;
 }
-//@ts-ignore
-export const AppContext = createContext<AppContextType>();
+
+export const AppContext = createContext<AppContextType | null>(null);
 
 export const AppContextProvider = ({ children, ...props }: any) => {
   const [appState, setAppState] = useAppState();

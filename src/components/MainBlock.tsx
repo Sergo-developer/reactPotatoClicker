@@ -2,9 +2,8 @@ import styled from 'styled-components';
 import potatoImage from '../assets/images/potato.png';
 import dirtImage from '../assets/images/dirt.png';
 import spruceLog from '../assets/images/spruce_log.png';
-import useComputedState from '../hooks/useComputedState';
-import useAppState from '../hooks/useAppState';
 import usePotatoSound from '../hooks/usePotatoSound';
+import useKek from '../hooks/useKek';
 
 const MainBlockWrapper = styled.div`
   display: grid;
@@ -57,8 +56,8 @@ const PotatoesPerClick = styled(PotatoesPerSec)`
 `;
 
 const MainBlock = () => {
-  const [appState, setAppState] = useAppState();
-  const [computedState] = useComputedState();
+  const {appState, setAppState, computedState, } = useKek();
+
   const { playPotatoSound } = usePotatoSound();
 
   const onPotatoClick = () => {

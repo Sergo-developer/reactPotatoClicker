@@ -1,13 +1,14 @@
 import styled from 'styled-components';
 import ClickShopElement from './ClickShopElement';
-import useAppState from '../../hooks/useAppState';
+import useKek from '../../hooks/useKek';
 
 const ClickShopWrapper = styled.div`
   display: inline-flex;
 `;
 
 const ClickShop = () => {
-  const [appState] = useAppState();
+  const {appState} = useKek();
+
 
   return (
     <ClickShopWrapper>
